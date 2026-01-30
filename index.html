@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ham's & Sam's Cuisine – Full Menu QR Order</title>
+<style>
+body{font-family:Arial;margin:0;background:#f6f6f6}
+header{background:#7a1f1f;color:#fff;padding:15px;text-align:center}
+.container{padding:15px;max-width:900px;margin:auto}
+h2{border-bottom:2px solid #ccc;margin-top:25px}
+.item{background:#fff;padding:10px;margin:8px 0;border-radius:8px;
+display:flex;justify-content:space-between;align-items:center}
+.qty button{padding:4px 10px;font-size:16px}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#fff;
+padding:10px;border-top:2px solid #ccc}
+.cart button{width:100%;padding:14px;background:#25D366;color:#fff;
+border:none;font-size:18px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Ham's & Sam's Cuisine</h1>
+<p>Mynthong, Jowai | 9862049176 / 9485163279</p>
+</header>
+
+<div class="container" id="menu"></div>
+
+<div class="cart">
+<button onclick="placeOrder()">Place Order via WhatsApp</button>
+</div>
+
+<script>
+let tableNo = prompt("Enter Table Number:");
+const menuData = {
+"Beverages":[["Red Tea",10],["Milk Tea",20],["Lemon Tea",20],["Coffee",30],["Black Coffee",20],["Special Tea",40],["Ginger Red/Milk Tea",30]],
+
+"Snacks":[
+["Chicken Sandwich",60],["Veg Sandwich",40],
+["Chicken Grilled Sandwich",70],["Veg Grilled Sandwich",50],
+["Chicken Cheese Grilled Sandwich",90],["Veg Cheese Grilled Sandwich",70],
+["Chicken Burger",100],["Chicken Cheese Burger",120],
+["Chicken Chop",50],["Chicken Pakora (8 pcs)",120],
+["Onion Pakora (8 pcs)",80],["Paneer Pakora (8 pcs)",90],
+["Egg Pakora (6 pcs)",100],["Chicken Cutlet",120],
+["French Fries",60],["French Fries Chilly",100],
+["Tornado Potato",120]
+],
+
+"Rolls":[
+["Chicken Roll",70],["Pork Roll",80],["Egg Roll",60],
+["Spring Roll",100],["Chicken Kathi Roll",120],["Veg Kathi Roll",100]
+],
+
+"Soups":[
+["Plain Soup",40],["Chicken Soup",60],
+["Chicken Clear Soup",60],["Veg Clear Soup",50],
+["Chicken Mushroom Soup",80],["Veg Mushroom Soup",60],
+["Chicken Hot & Sour Soup",80],["Veg Hot & Sour Soup",60],
+["Veg Sweet Corn Soup",60],["Chicken Sweet Corn Soup",80],
+["Chicken Manchow Soup",100],["Veg Manchow Soup",80],
+["Chicken Egg Drop Soup",100],
+["Chicken Wanton Soup",100],["Veg Wanton Soup",80],
+["Chicken Lung Fung Soup",100],["Veg Lung Fung Soup",80],
+["Chicken Cream Mushroom Soup",100],
+["Chicken Lemon Coriander Soup",80]
+],
+
+"Pasta":[
+["Chicken Penne",160],["Veg Penne",120],
+["Chicken Fusilli",160],["Veg Fusilli",120],
+["Chicken Farfalle",160],["Veg Farfalle",120],
+["Chicken Spaghetti",160],["Veg Spaghetti",120],
+["Chicken Macaroni",160],["Veg Macaroni",120]
+],
+
+"Noodles":[
+["Chicken Fried Chow",100],["Veg Fried Chow",80],
+["Pork Fried Chow",120],["Mixed Fried Chow",180],
+["Chicken Hakka Chow",100],["Veg Hakka Chow",80],
+["Pork Hakka Chow",110],
+["Chicken Soup Chow",120],["Veg Soup Chow",100],["Pork Soup Chow",130],
+["Chicken Schezwan Chow",160],["Veg Schezwan Chow",140],
+["Mixed Schezwan Chow",180],
+["Chicken Singapore Chow",200],["Veg Singapore Chow",160],
+["Pork Singapore Chow",220],
+["Chow Mein",180],["American Chop Suey",180]
+],
+
+"Momo":[
+["Chicken Momo (5 pcs)",80],["Chicken Fried Momo (5 pcs)",100],
+["Pork Momo (5 pcs)",100],["Pork Fried Momo (5 pcs)",120],
+["Manchurian Momo (5 pcs)",120],["Schezwan Momo (5 pcs)",150],
+["Chicken Steam Momo with Soup",110],
+["Pork Steam Momo with Soup",140],
+["Garlic Sauce Momo",160]
+],
+
+"Rice":[
+["Plain Rice",80],
+["Chicken Fried Rice",120],["Veg Fried Rice",100],
+["Pork Fried Rice",140],["Mixed Fried Rice",180],
+["Chicken Schezwan Fried Rice",200],["Veg Schezwan Fried Rice",150],
+["Pork Schezwan Fried Rice",220]
+],
+
+"Pork Items":[
+["Pork Dry Fry",190],["Pork Crispy",200],
+["Pork Chilly Gravy",220],
+["Pork Hot & Garlic Sauce",220],
+["Pork Manchurian",220]
+],
+
+"Prawn Items":[
+["Prawn Dry Fry",280],["Prawn Chilly",300],
+["Prawn Crispy",280],["Golden Fried Prawn",300],
+["Prawn Special",360],["Prawn Hot & Garlic Sauce",280]
+],
+
+"Chicken Items":[
+["Chicken Drum Stick (5 pcs)",200],["Chicken Crispy (5 pcs)",200],
+["Chicken Dry Fry (8 pcs)",180],["Chicken Chilly (8 pcs)",200],
+["Chicken Hot & Garlic Sauce",200],["Chicken Manchurian (8 pcs)",200],
+["Chicken Lemon (8 pcs)",200],["Chicken Wings Dry",180],
+["Chicken Wings Gravy",200],["Chicken Strips Crispy",200],
+["Chicken Leg Piece Dry",80],["Chicken Leg Piece Gravy",100],
+["Chicken Cheese Ball",220]
+]
+};
+
+let cart = {};
+const menu = document.getElementById("menu");
+
+for (let cat in menuData){
+  menu.innerHTML += `<h2>${cat}</h2>`;
+  menuData[cat].forEach(i=>{
+    cart[i[0]] = {price:i[1], qty:0};
+    menu.innerHTML += `
+    <div class="item">
+      <div>${i[0]} – ₹${i[1]}</div>
+      <div class="qty">
+        <button onclick="changeQty('${i[0]}',-1)">−</button>
+        <span id="${i[0]}qty">0</span>
+        <button onclick="changeQty('${i[0]}',1)">+</button>
+      </div>
+    </div>`;
+  });
+}
+
+function changeQty(name,val){
+  cart[name].qty = Math.max(0, cart[name].qty + val);
+  document.getElementById(name+"qty").innerText = cart[name].qty;
+}
+
+function placeOrder(){
+  let msg = `Table No: ${tableNo}%0AOrder:%0A`;
+  let total = 0;
+  for (let i in cart){
+    if(cart[i].qty>0){
+      msg += `${i} x ${cart[i].qty} = ₹${cart[i].qty*cart[i].price}%0A`;
+      total += cart[i].qty*cart[i].price;
+    }
+  }
+  if(total==0){alert("No items selected");return;}
+  msg += `%0ATotal: ₹${total}`;
+  window.open(`https://wa.me/919862049176?text=${msg}`,'_blank');
+}
+</script>
+
+</body>
+</html>
